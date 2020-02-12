@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.PermissionMapper">
+    <resultMap id="BaseResultMap" type="com.shh.crm.domain.Permission">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="resource" property="resource"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from permission
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="com.shh.crm.domain.Permission" useGeneratedKeys="true" keyProperty="id">
+        insert into permission (name, resource)
+        values (#{name}, #{resource})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.shh.crm.domain.Permission">
+        update permission
+        set name = #{name},
+        resource = #{resource}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select id, name, resource
+        from permission
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, name, resource
+        from permission
+    </select>
+
+    <select id="queryForPageCount" resultType="long">
+        select count(*) from permission
+    </select>
+
+    <select id="queryForPage" resultType="permission">
+        select * from permission
+        <if test="page!=null">
+            limit #{start}, #{rows}
+        </if>
+    </select>
+
+    <select id="queryPermissionByRoleId" parameterType="long" resultType="permission">
+        select * from permission
+        where id in (select permission_id from role_permission where role_id = #{roleId})
+    </select>
+
+    <select id="queryPermissionByEmployeeId" parameterType="long" resultType="permission">
+        select * from permission
+        where id in
+        (
+            select distinct permission_id from role_permission where role_id in
+            (
+                select role_id from employee_role where employee_id = #{employeeId}
+            )
+        )
+    </select>
+</mapper>

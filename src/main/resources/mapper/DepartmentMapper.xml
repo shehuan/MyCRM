@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.DepartmentMapper">
+    <resultMap id="BaseResultMap" type="department">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <result column="manager_id" property="managerId"/>
+        <result column="parent_id" property="parentId"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete from department
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="department" useGeneratedKeys="true" keyProperty="id">
+        insert into department (sn, name, manager_id,
+        parent_id, state)
+        values (#{sn}, #{name}, #{manager.id},
+        #{parent.id}, #{state})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="department">
+        update department
+        set sn = #{sn},
+        name = #{name},
+        manager_id = #{manager.id},
+        parent_id = #{parent.id},
+        state = #{state}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select id, sn, name, manager_id, parent_id, state
+        from department
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, sn, name, manager_id, parent_id, state
+        from department
+    </select>
+
+    <select id="queryForEmployee" resultType="department">
+        select  id, name from department
+    </select>
+</mapper>

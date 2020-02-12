@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "text": "员工管理",
+    "attributes": {
+      "url": "/employee/page"
+    }
+  },
+  {
+    "id": 2,
+    "text": "角色管理",
+    "attributes": {
+      "url": "/role/page"
+    }
+  }
+]

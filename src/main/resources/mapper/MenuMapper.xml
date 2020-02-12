@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.shh.crm.domain.Menu">
+        <id column="id" property="id"/>
+        <result column="text" property="text"/>
+        <result column="icon_cls" property="iconCls"/>
+        <result column="checked" property="checked"/>
+        <result column="state" property="state"/>
+        <result column="attributes" property="attributes"/>
+        <collection property="children" ofType="menu" column="id" select="queryMenuById"/>
+    </resultMap>
+
+    <select id="queryMenu" resultMap="BaseResultMap">
+        select * from menu where parent_id is null
+    </select>
+
+    <select id="queryMenuById" resultMap="BaseResultMap">
+        select * from menu where parent_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--扫描service目录下的类，并将对象存储在IoC容器中-->
+    <context:component-scan base-package="com.shh.crm.service.impl"/>
+    <!--使用注解驱动-->
+    <!--<context:annotation-config/>-->
+
+    <!--加载属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-resource-not-found="true"/>
+
+    <!--配置数据库连接池-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${database.driver}"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+    </bean>
+    <!--集成MyBatis-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--MyBatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--MyBatis映射器目录-->
+        <property name="mapperLocations" value="classpath:mapper/*Mapper.xml"/>
+    </bean>
+    <!--采用自动扫描方式创建 mapper bean-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描的目录-->
+        <property name="basePackage" value="com.shh.crm.mapper"/>
+        <!--扫描使用了Repository注解的类-->
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+    </bean>
+
+    <!--Spring中基于xml的声明式事务配置-->
+    <!--配置事务的通知-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="logUtil" class="com.shh.crm.util.LogUtil"/>
+
+    <!--配置事务通知模板，即哪些方法需要使用事务-->
+    <tx:advice id="advice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="query*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="list*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--事务的AOP相关配置-->
+    <aop:config>
+        <!--定义切入点表达式-->
+        <aop:pointcut id="pt" expression="execution(* com.shh.crm.service.impl.*.*(..))"/>
+        <!--建立切点表达式和事务的通知的关系-->
+        <aop:advisor advice-ref="advice" pointcut-ref="pt"/>
+        <!--配置日志切面-->
+        <aop:aspect ref="logUtil">
+            <aop:after method="writeLog" pointcut-ref="pt"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

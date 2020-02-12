@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.LogMapper">
+    <resultMap id="BaseResultMap" type="com.shh.crm.domain.Log">
+        <id column="id" property="id"/>
+        <result column="ip" property="ip"/>
+        <result column="time" property="time"/>
+        <result column="function_name" property="functionName"/>
+        <result column="params_value" property="paramsValue"/>
+        <association property="user" column="user_id" select="com.shh.crm.mapper.EmployeeMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <insert id="insert" parameterType="log" useGeneratedKeys="true" keyProperty="id">
+        insert into log (user_id, ip, time,
+        function_name, params_value)
+        values (#{user.id}, #{ip}, #{time},
+        #{functionName}, #{paramsValue})
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, user_id, ip, time, function_name, params_value
+        from log
+    </select>
+</mapper>

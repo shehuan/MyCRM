@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.shh.crm.domain.Role">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from role
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="com.shh.crm.domain.Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role (sn, name)
+        values (#{sn}, #{name})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.shh.crm.domain.Role">
+        update role
+        set sn = #{sn},
+        name = #{name}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select id, sn, name
+        from role
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, sn, name
+        from role
+    </select>
+
+    <insert id="insertRelation">
+        insert into role_permission(role_id, permission_id) values(#{roleId}, #{permissionId})
+    </insert>
+
+    <sql id="page_where_sql">
+        <where>
+            <if test="keyword!=null">
+                sn like concat('%', #{keyword}, '%') or name like concat('%', #{keyword}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryForPageCount" resultType="long">
+        select count(*) from role
+        <include refid="page_where_sql"/>
+    </select>
+
+    <select id="queryForPage" resultMap="BaseResultMap">
+        select * from role
+        <include refid="page_where_sql"/>
+        <if test="page!=null">
+            limit #{start}, #{rows}
+        </if>
+    </select>
+
+    <delete id="deleteRelationByRoleId">
+        delete from role_permission where role_id = #{id}
+    </delete>
+
+    <select id="queryRoleByEmployeeId" resultType="long">
+        select role_id from employee_role where employee_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shh.crm.mapper.EmployeeMapper">
+    <resultMap id="BaseResultMap" type="employee">
+        <id column="id" property="id"/>
+        <id column="username" property="username"/>
+        <id column="realname" property="realname"/>
+        <id column="email" property="email"/>
+        <id column="phone" property="phone"/>
+        <id column="admin" property="admin"/>
+        <id column="state" property="state"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <association property="department" javaType="department" columnPrefix="d_">
+            <id column="id" property="id"/>
+            <id column="sn" property="sn"/>
+            <id column="name" property="name"/>
+        </association>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete from employee
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="employee" useGeneratedKeys="true" keyProperty="id">
+        insert into employee (username, realname, password,
+        email, phone, admin, state,
+        create_time, update_time, department_id
+        )
+        values (#{username}, #{realname}, #{password},
+        #{email}, #{phone}, #{admin}, #{state},
+        #{createTime}, #{updateTime}, #{department.id}
+        )
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="employee">
+        update employee
+        set username = #{username},
+        realname = #{realname},
+        email = #{email},
+        phone = #{phone},
+        update_time = #{updateTime},
+        department_id = #{department.id}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+        select id, username, realname, email, phone, admin, state, create_time
+        from employee
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, username, realname, password, email, phone, admin, state, create_time,
+        update_time, department_id
+        from employee
+    </select>
+    <select id="getEmployeeForLogin" resultMap="BaseResultMap">
+        select * from employee where username=#{username} and password=#{password}
+    </select>
+
+    <sql id="page_sql">
+        select e.id, e.username, e.realname, e.email, e.phone, e.admin, e.state, e.create_time,
+        d.id d_id, d.sn d_sn, d.name d_name
+        from employee e left join department d on e.department_id = d.id
+        <where>
+            <if test="keyword!=null">
+                username like concat('%', #{keyword}, '%') or realname like concat('%', #{keyword}, '%') or email
+                like concat('%', #{keyword}, '%') or phone like concat('%', #{keyword}, '%') or d.name like concat('%',
+                #{keyword}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="queryForPageCount" resultType="long">
+        select count(*) from
+        (<include refid="page_sql"/>) as c
+    </select>
+
+    <select id="queryForPage" resultMap="BaseResultMap">
+        <include refid="page_sql"/>
+        <if test="page!=null">
+            limit #{start}, #{rows}
+        </if>
+    </select>
+
+    <update id="updateState">
+        update employee set state = #{state} where id = #{id}
+    </update>
+
+    <insert id="insertRelation">
+        insert into employee_role(employee_id, role_id) values(#{employeeId}, #{roleId})
+    </insert>
+
+    <delete id="deleteRelationByEmployeeId">
+        delete from employee_role where employee_id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <description>MyCRM函数库</description>
+    <display-name>客户关系管理系统</display-name>
+    <tlib-version>1.1</tlib-version>
+    <short-name>myFn</short-name>
+    <uri>http://www.shh.com/jsp/jstl/functions</uri>
+
+    <function>
+        <description>
+            用户访问权限校验
+        </description>
+        <name>checkPermission</name>
+        <function-class>com.shh.crm.util.PermissionUtil</function-class>
+        <function-signature>boolean checkPermission(java.lang.String)</function-signature>
+        <example>
+            ${myFn:checkPermission("xxx)}
+        </example>
+    </function>
+
+</taglib>
