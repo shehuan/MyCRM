@@ -20,10 +20,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (request.getRequestURI() != null && request.getRequestURI().contains("login")) {
             return true;
         }
+        String contextPath = request.getContextPath();
         // 未登录则跳转到登陆页面
         Employee employee = (Employee) request.getSession().getAttribute(Const.USER_IN_SESSION);
         if (employee == null) {
-            response.sendRedirect("/login");
+            response.sendRedirect(contextPath.concat("/login"));
             return false;
         }
         // 访问权限校验
@@ -37,10 +38,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (!result) {
                 if (handlerMethod.getMethod().isAnnotationPresent(ResponseBody.class)) {
                     // 请求需要返回json
-                    response.sendRedirect("/permission/noPermissionJSON");
+                    response.sendRedirect(contextPath + "/permission/noPermissionJSON");
                 } else {
                     // 请求需要返回页面
-                    response.sendRedirect("/permission/noPermissionPage");
+                    response.sendRedirect(contextPath + "/permission/noPermissionPage");
                 }
                 return false;
             }

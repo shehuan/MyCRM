@@ -1,9 +1,9 @@
 function submitForm() {
-    $.post("/login", $("form").serialize(), function (data) {
+    $.post(contextPath + "/login", $("form").serialize(), function (data) {
         // 登录成功
         if (data.success) {
             // 跳转到首页
-            window.location.href = "/index";
+            window.location.href = contextPath + "/index";
         } else {
             showAlter(data.message);
         }

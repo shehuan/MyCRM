@@ -13,7 +13,7 @@
     <!-- 扫描控制器包中的类 -->
     <context:component-scan base-package="com.shh.crm.controller"/>
 
-    <!-- 静态资源处理
+    <!-- 静态资源处理，需要结合web.xml中对静态资源的处理
     对进入DispatcherServlet的URL进行筛查，
     如果发现是静态资源的请求，就将该请求转由Web应用服务器默认的Servlet处理，
     如果不是静态资源的请求，才由DispatcherServlet继续处理-->

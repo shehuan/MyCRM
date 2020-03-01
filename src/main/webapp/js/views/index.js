@@ -1,6 +1,6 @@
 $(function () {
     $("#menu").tree({
-        url: '/menu',
+        url: contextPath + '/menu',
         onClick: function (node) {
             if (node.attributes && typeof node.attributes == 'string') {
                 node.attributes = $.parseJSON(node.attributes);
@@ -18,7 +18,7 @@ $(function () {
                     title: node.text,
                     closable: true,
                     // href: node.attributes.url
-                    content: "<iframe src='" + node.attributes.url + "' style='width:100%;height:100%' frameborder=0></iframe>"
+                    content: "<iframe src='" + contextPath + node.attributes.url + "' style='width:100%;height:100%' frameborder=0></iframe>"
                 });
             }
 

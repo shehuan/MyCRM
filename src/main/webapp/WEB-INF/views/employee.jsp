@@ -5,7 +5,7 @@
 <head>
     <title>员工管理</title>
     <%@include file="common.jsp" %>
-    <script src="/js/views/employee.js"></script>
+    <script src="${pageContext.request.contextPath}/js/views/employee.js"></script>
 </head>
 <body>
 <table id="employee_datagrid"></table>
@@ -18,7 +18,8 @@
             <a id="employee_edit" class="easyui-linkbutton" iconCls="icon-edit" plain="true" data-cmd="edit">编辑</a>
         </c:if>
         <c:if test="${myFn:checkPermission('com.shh.crm.controller.EmployeeController:delete')}">
-            <a id="employee_delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true" data-cmd="delete">离职</a>
+            <a id="employee_delete" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
+               data-cmd="delete">离职</a>
         </c:if>
         <a class="easyui-linkbutton" iconCls="icon-reload" plain="true" data-cmd="reload">刷新</a>
     </div>
@@ -49,7 +50,7 @@
             <tr>
                 <td>部门</td>
                 <td><input type="text" name="department.id" class="easyui-combobox"
-                           data-options="valueField:'id',textField:'name',url:'/department/list'"></td>
+                           data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath}/department/list'"></td>
             </tr>
             <tr>
                 <td>入职时间</td>
@@ -58,7 +59,7 @@
             <tr>
                 <td>角色</td>
                 <td><input id="employee_roles" type="text" class="easyui-combobox"
-                           data-options="valueField:'id',textField:'name',url:'/role/queryAllRole', multiple:true"></td>
+                           data-options="valueField:'id',textField:'name',url:'${pageContext.request.contextPath}/role/queryAllRole', multiple:true"></td>
             </tr>
         </table>
     </form>

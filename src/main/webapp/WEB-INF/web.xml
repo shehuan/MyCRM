@@ -4,52 +4,62 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-  <!--配置ContextLoaderListener监听器用来初始化Spring IoC容器，该监听器默认会加载WEB-INF下的applicationContext.xml-->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  <!--指定ContextLoaderListener监听器需要加载的Spring IoC配置文件路径，包括mybatis、redis-->
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring-mybatis.xml</param-value>
-  </context-param>
+    <!--配置ContextLoaderListener监听器用来初始化Spring IoC容器，该监听器默认会加载WEB-INF下的applicationContext.xml-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!--指定ContextLoaderListener监听器需要加载的Spring IoC配置文件路径，包括mybatis、redis-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring-mybatis.xml</param-value>
+    </context-param>
 
-  <!--配置DispatcherServlet-->
-  <!--注意：Spring MVC框架会默认根据servlet-name配置，找到/WEB-INF/dispatcher-servlet.xml作为配置文件载入Web工程中-->
-  <servlet>
-    <servlet-name>dispatcher</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring-mvc.xml</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+    <!--配置DispatcherServlet-->
+    <!--注意：Spring MVC框架会默认根据servlet-name配置，找到/WEB-INF/dispatcher-servlet.xml作为配置文件载入Web工程中-->
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-  <!--拦截所有请求，但不包括jsp-->
-  <!--
-      /  只会匹配/add类型的url，不会匹配*.jsp类型的url
-      /* 以上两种类型的url都会匹配
-      /* 匹配一级，即 /add , /query 等
-      /**匹配多级，即 /add , /add/user, /add/user/user... 等
-  -->
-  <servlet-mapping>
-    <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
+    <!--拦截所有请求，但不包括jsp-->
+    <!--
+        /  只会匹配/add类型的url，不会匹配*.jsp类型的url
+        /* 以上两种类型的url都会匹配
+        /* 匹配一级，即 /add , /query 等
+        /**匹配多级，即 /add , /add/user, /add/user/user... 等
+    -->
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
-  <!--编码过滤器，解决中文乱码-->
-  <filter>
-    <filter-name>characterEncodingFilter</filter-name>
-    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-    <init-param>
-      <param-name>encoding</param-name>
-      <param-value>UTF-8</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>characterEncodingFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+    <!--不拦截的静态资源类型-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+
+    <!--编码过滤器，解决中文乱码-->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

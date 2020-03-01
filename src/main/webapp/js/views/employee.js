@@ -6,7 +6,7 @@ $(function () {
     let employeeRoles = $("#employee_roles");
     // 表格初始化
     employeeDatagrid.datagrid({
-        url: "/employee/list",
+        url: contextPath + "/employee/list",
         fit: true,
         fitColumns: true,
         rownumbers: true,
@@ -54,9 +54,9 @@ $(function () {
             // id 有值则是编辑
             let url;
             if (id) {
-                url = "/employee/update"
+                url = contextPath + "/employee/update"
             } else {
-                url = "/employee/save"
+                url = contextPath + "/employee/save"
             }
             employeeForm.form("submit", {
                 url: url,
@@ -99,7 +99,7 @@ $(function () {
                 // 同步请求
                 $.ajax({
                     async: false,
-                    url: '/role/queryRoleByEmployeeId?employeeId=' + row.id,
+                    url: contextPath + '/role/queryRoleByEmployeeId?employeeId=' + row.id,
                     dataType: 'json',
                     success: function (data) {
                         employeeRoles.combobox('setValues', data);
@@ -116,7 +116,7 @@ $(function () {
             if (row) {
                 $.messager.confirm('温馨提示', '确定要修改员工为离职状态？', function (r) {
                     if (r) {
-                        $.get("/employee/delete?id=" + row.id, function (data) {
+                        $.get(contextPath + "/employee/delete?id=" + row.id, function (data) {
                             if (data.success) {
                                 showAlter(data.message, function () {
                                     // 刷新表格

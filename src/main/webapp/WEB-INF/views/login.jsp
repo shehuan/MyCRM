@@ -4,8 +4,8 @@
     <title>登录</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@include file="common.jsp" %>
-    <script src="/js/views/login.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
+    <script src="${pageContext.request.contextPath}/js/views/login.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <section class="container">

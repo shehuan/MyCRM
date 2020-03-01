@@ -3,7 +3,7 @@
 <head>
     <title>角色管理</title>
     <%@include file="common.jsp" %>
-    <script src="/js/views/role.js"></script>
+    <script src="${pageContext.request.contextPath}/js/views/role.js"></script>
 </head>
 <body>
 <table id="role_datagrid"></table>

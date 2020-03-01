@@ -4,7 +4,7 @@
     <title>客户关系管理系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@include file="common.jsp" %>
-    <script src="/js/views/index.js?v=" + Math.random()></script>
+    <script src="${pageContext.request.contextPath}/js/views/index.js?v=" + Math.random()></script>
 </head>
 <body>
 <div id="cc" class="easyui-layout" fit="true" style="width:600px;height:400px;">

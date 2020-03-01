@@ -7,7 +7,7 @@ $(function () {
     let selfPermission = $("#selfPermission");
     // 表格初始化
     roleDatagrid.datagrid({
-        url: "/role/list",
+        url: contextPath + "/role/list",
         fit: true,
         fitColumns: true,
         rownumbers: true,
@@ -22,7 +22,7 @@ $(function () {
     });
 
     allPermission.datagrid({
-        url: "/permission/list",
+        url: contextPath + "/permission/list",
         width: 300,
         height: 300,
         title: "所有权限",
@@ -99,9 +99,9 @@ $(function () {
             // id 有值则是编辑
             let url;
             if (id) {
-                url = "/role/update"
+                url = contextPath + "/role/update"
             } else {
-                url = "/role/save"
+                url = contextPath + "/role/save"
             }
             roleForm.form("submit", {
                 url: url,
@@ -141,7 +141,7 @@ $(function () {
 
                 // 加载该角色已有的权限
                 let options = selfPermission.datagrid("options");
-                options.url = "/permission/queryPermissionByRoleId";
+                options.url = contextPath + "/permission/queryPermissionByRoleId";
                 selfPermission.datagrid("load", {
                     roleId: rowData.id,
                 });
@@ -156,7 +156,7 @@ $(function () {
             if (row) {
                 $.messager.confirm('温馨提示', '确定要删除该角色吗？', function (r) {
                     if (r) {
-                        $.get("/role/delete?id=" + row.id, function (data) {
+                        $.get(contextPath + "/role/delete?id=" + row.id, function (data) {
                             if (data.success) {
                                 showAlter(data.message, function () {
                                     // 刷新表格
